@@ -1,0 +1,30 @@
+#wec-can{
+	
+}
+
+video { 
+	border: 1px solid #ccc;
+	display: block;
+	margin: 0 0 20px 0; 
+}
+	
+#canvas { 
+	margin-top: 20px; 
+	border: 1px solid #ccc; 
+	display: none; 
+}
+
+#border{
+	position: absolute;
+	border: 2px solid rgba(105,105,105,.5);
+	color: rgba(105,105,105,.5);
+	width: 254px;
+	height: 338.67px;
+	left: calc(50% - 126px);
+	top: 30px;
+}
+
+#border p{
+	position: relative;
+	
+}

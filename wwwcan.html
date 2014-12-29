@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html lang="pt-br">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Web Can</title>
+		<link type="text/css" rel="stylesheet" href="style.css"/>
+		<link href="css/bootstrap.min.css" rel="stylesheet">		
+	</head>
+
+	<body>
+		<section id="web-can" class="container-fluid">
+			<section id="camera" class="row">
+				<center>
+					<section id="border"><p>3 x 4</p></section>
+					<video id="video" width="540" height="405" autoplay></video>
+				</center>
+			</section> 
+
+			<section id="box-btns" class="row">
+				<section class="btn-group btn-group-justified" role="group" aria-label="Opções da WebCan">					
+					<div class="btn-group" role="group">
+						<button id="snap" onclick="mudBtn(1)" class="btn btn-primary btn-lg"><i class="glyphicon glyphicon-camera"></i><span id="txt"> Tirar Foto</span></button>
+					</div>
+					<div class="btn-group" role="group">
+						<button id="save" class="btn btn-success btn-lg"><i class="glyphicon glyphicon-floppy-disk"></i> Salvar Foto</button>
+					</div>
+				</section>
+			</section> 
+
+			<section id="foto" class="row">
+				<center>
+					<canvas id="canvas" width="254" height="338.67"></canvas>
+				</center>
+			</section> 
+		</section>   
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script>
+			var cont = 0;
+			function mudBtn(inc){
+				cont += parseInt(inc);
+				if(cont%2 != 0){
+					document.getElementById('txt').innerHTML = ' Tirar outra Foto';
+					document.getElementById("camera").style.display = "none";
+					document.getElementById("canvas").style.display = "block";
+				}
+				else{
+					document.getElementById('txt').innerHTML = ' Tirar Foto';
+					document.getElementById("camera").style.display = "block";
+					document.getElementById("canvas").style.display = "none";
+				}
+			}
+			
+			window.addEventListener("DOMContentLoaded", function() {
+				var canvas = document.getElementById("canvas"),
+				context = canvas.getContext("2d"),
+				video = document.getElementById("video"),
+				videoObj = { "video": true },
+				errBack = function(error) {
+						console.log("Video capture error: ", error.code); 
+				};  
+				if(navigator.getUserMedia) {
+					navigator.getUserMedia(videoObj, function(stream) {
+						video.src = stream;
+						video.play();
+					}, errBack);
+				} else if(navigator.webkitGetUserMedia) {
+					navigator.webkitGetUserMedia(videoObj, function(stream){
+						video.src = window.webkitURL.createObjectURL(stream);
+						video.play();
+					}, errBack);
+				}
+				else if(navigator.mozGetUserMedia) {
+					navigator.mozGetUserMedia(videoObj, function(stream){
+						video.src = window.URL.createObjectURL(stream);
+						video.play();
+					}, errBack);
+				}
+			}, false);
+			document.getElementById("snap").addEventListener("click", function() {      
+			
+canvas.getContext("2d").drawImage(video, 169, 36, 302, 402, 0, 0, 254, 338.67);   
+				//canvas.getContext("2d").drawImage(video, 143, 30, 540, 405, 397, 368.67, 254, 338.67);       
+			//alert(canvas.toDataURL());
+			});
+			document.getElementById("save").addEventListener("click", function() {      
+				$.post('fotossalvar.php', {imagem:canvas.toDataURL()}, function(data){
+				},'json');
+			});
+		</script>
+	</body>
+	
+</html>
